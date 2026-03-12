@@ -7,13 +7,18 @@ import {
   signOut as firebaseSignOut,
   type User,
 } from 'firebase/auth'
-import { auth, googleProvider } from '../lib/firebase'
+import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase'
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false)
+      return
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u)
       setLoading(false)
@@ -21,15 +26,26 @@ export const useAuth = () => {
     return unsubscribe
   }, [])
 
-  const signInWithGoogle = () => signInWithPopup(auth, googleProvider)
+  const unavailable = () => Promise.reject(new Error('Firebase authentication is not configured'))
+
+  const signInWithGoogle = () =>
+    auth && googleProvider ? signInWithPopup(auth, googleProvider) : unavailable()
 
   const signInWithEmail = (email: string, password: string) =>
-    signInWithEmailAndPassword(auth, email, password)
+    auth ? signInWithEmailAndPassword(auth, email, password) : unavailable()
 
   const signUpWithEmail = (email: string, password: string) =>
-    createUserWithEmailAndPassword(auth, email, password)
+    auth ? createUserWithEmailAndPassword(auth, email, password) : unavailable()
 
-  const signOut = () => firebaseSignOut(auth)
+  const signOut = () => (auth ? firebaseSignOut(auth) : Promise.resolve())
 
-  return { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, signOut }
+  return {
+    user,
+    loading,
+    isAvailable: isFirebaseConfigured,
+    signInWithGoogle,
+    signInWithEmail,
+    signUpWithEmail,
+    signOut,
+  }
 }

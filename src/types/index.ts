@@ -32,6 +32,17 @@ export interface Comment {
   createdAt: string
 }
 
+export interface DraftMediaAttachment {
+  id: string
+  name: string
+  src: string
+  type: 'image'
+}
+
+export interface MediaAttachment extends DraftMediaAttachment {
+  postId: number
+}
+
 export interface AuthUser {
   uid: string
   email: string | null
