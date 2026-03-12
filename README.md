@@ -2,6 +2,8 @@
 
 Frontend implementation of the CodeLeap engineering test using React, TypeScript, Vite, React Query, Tailwind, Zustand, and optional Firebase authentication.
 
+**Live app:** [https://codeleap-pi.vercel.app](https://codeleap-pi.vercel.app)
+
 ## Core Requirements
 
 - Username-first entry flow that matches the PDF requirement
@@ -45,6 +47,8 @@ VITE_API_BASE_URL=https://dev.codeleap.co.uk/careers/
 npm install
 npm run dev
 ```
+
+To test with multiple posts, run the seed: `npm run seed`.
 
 ## Validate
 
