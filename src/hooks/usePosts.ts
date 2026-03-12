@@ -4,6 +4,7 @@ import { listPosts, createPost, updatePost, deletePost } from '../lib/api'
 import type { CreatePostPayload, UpdatePostPayload } from '../types'
 
 const POSTS_KEY = ['posts']
+const onError = () => toast.error('Something went wrong. Please try again.')
 
 export const usePosts = () =>
   useInfiniteQuery({
@@ -24,7 +25,7 @@ export const useCreatePost = () => {
       qc.invalidateQueries({ queryKey: POSTS_KEY })
       toast.success('Post created!')
     },
-    onError: () => toast.error('Something went wrong. Please try again.'),
+    onError,
   })
 }
 
@@ -37,7 +38,7 @@ export const useUpdatePost = () => {
       qc.invalidateQueries({ queryKey: POSTS_KEY })
       toast.success('Post updated!')
     },
-    onError: () => toast.error('Something went wrong. Please try again.'),
+    onError,
   })
 }
 
@@ -49,6 +50,6 @@ export const useDeletePost = () => {
       qc.invalidateQueries({ queryKey: POSTS_KEY })
       toast.success('Post deleted!')
     },
-    onError: () => toast.error('Something went wrong. Please try again.'),
+    onError,
   })
 }

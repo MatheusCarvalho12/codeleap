@@ -1,8 +1,9 @@
 import axios from 'axios'
 import type { Post, PostsResponse, CreatePostPayload, UpdatePostPayload } from '../types'
+import { env } from './env'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'https://dev.codeleap.co.uk/careers/',
+  baseURL: env.API_BASE_URL,
 })
 
 export const listPosts = async (offset = 0, limit = 10): Promise<PostsResponse> => {
